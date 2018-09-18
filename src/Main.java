@@ -18,6 +18,11 @@ public class Main {
         System.out.println("Number of paths from 0 to n are: " + countBoardPathsTabulated(n));
         long endTab = System.currentTimeMillis();
         System.out.println("The calculation took " + (endTab - startTab) + "ms");
+
+        startTab = System.currentTimeMillis();
+        System.out.println("Number of paths from 0 to n are: " + countBoardPathsSlider(n));
+        endTab = System.currentTimeMillis();
+        System.out.println("The calculation took " + (endTab - startTab) + "ms");
     }
 
     public static int countBoardPaths(int src, int dest) {
@@ -79,5 +84,28 @@ public class Main {
         }
 
         return f[0];
+    }
+
+    public static int countBoardPathsSlider(int dest) {
+        int[] slider = new int[6];
+        slider[0] = 1; // this is f[dest] : known, we need to find f[0]
+        // at this point, the rest of the slider's window is outside the f (function array), so they're all 0
+
+        for (int noOfSlides = dest; noOfSlides > 0; noOfSlides--) {
+            int newSZero = 0;
+            // calculate the new slider[0] value
+            for (int i = 0; i < slider.length; i++) {
+                newSZero += slider[i];
+            }
+
+            // shift the sliding window 1 position to the left
+            for (int i = slider.length - 1; i > 0; i--) {
+                slider[i] = slider[i - 1];
+            }
+            // assigning the new value to slider[0]
+            slider[0] = newSZero;
+        }
+
+        return slider[0];
     }
 }
